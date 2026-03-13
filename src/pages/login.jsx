@@ -5,8 +5,8 @@
 
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-
-const API_BASE   = "/api";
+import { AUTH_URL } from "../lib/index";
+//const API_BASE   = "/api";
 const BLUE       = "#2563EB";
 const BLUE_HOVER = "#1d4ed8";
 
@@ -26,7 +26,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res  = await fetch(`${API_BASE}/auth/admin/login`, {
+      const res  = await fetch(`${AUTH_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.toLowerCase().trim(), password }),
