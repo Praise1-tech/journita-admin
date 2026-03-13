@@ -6,8 +6,9 @@
 import { useState, useEffect, useContext, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { RouterCtx } from "../App";
+import { AUTH_URL } from "../lib/index";
 
-const API = "/api/auth/admin";
+//const API = "/api/auth/admin";
 
 const ROLE_COLORS = {
   super_admin: { bg: "rgba(245,166,35,0.12)", text: "#F5A623", border: "rgba(245,166,35,0.3)" },
@@ -47,7 +48,7 @@ export default function AdminManager() {
   const fetchAdmins = useCallback(async () => {
     setLoading(true);
     try {
-      const res  = await fetch(`${API}/list`, { headers });
+      const res = await fetch(`${AUTH_URL}/list`, { headers });
       const data = await res.json();
       if (data.success) setAdmins(data.admins);
       else showToast(data.message || "Failed to load admins", "error");
@@ -72,7 +73,7 @@ export default function AdminManager() {
     setSubmitting(true);
     try {
       const isEdit = !!editTarget;
-      const url    = isEdit ? `${API}/${editTarget}` : `${API}/create`;
+      const url    = isEdit ? `${AUTH_URL}/${editTarget}` : `${AUTH_URL}/create`;
       const method = isEdit ? "PATCH" : "POST";
       const body = { name: form.name, email: form.email, role: form.role, permissions: form.permissions };
       if (!isEdit || form.password) body.password = form.password;
@@ -86,7 +87,7 @@ export default function AdminManager() {
   const toggleStatus = async (adm) => {
     const newStatus = adm.status === "active" ? "inactive" : "active";
     try {
-      const res  = await fetch(`${API}/${adm.id}`, { method: "PATCH", headers, body: JSON.stringify({ status: newStatus }) });
+      const res = await fetch(`${AUTH_URL}/${adm.id}`, { method: "PATCH", headers, body: JSON.stringify({ status: newStatus }) });
       const data = await res.json();
       if (data.success) { showToast(`Admin ${newStatus === "active" ? "activated" : "deactivated"}`, "success"); fetchAdmins(); }
       else showToast(data.message || "Failed", "error");
@@ -96,7 +97,7 @@ export default function AdminManager() {
   const handleDelete = async () => {
     if (!deleteModal) return;
     try {
-      const res  = await fetch(`${API}/${deleteModal.id}`, { method: "DELETE", headers });
+    const res = await fetch(`${AUTH_URL}/${deleteModal.id}`, { method: "DELETE", headers });
       const data = await res.json();
       if (data.success) { showToast("Admin deleted", "success"); setDeleteModal(null); fetchAdmins(); }
       else showToast(data.message || "Failed", "error");

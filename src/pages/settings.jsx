@@ -13,8 +13,8 @@ import Card          from "../component/ui/card";
 import Badge         from "../component/ui/Badge";
 import Btn           from "../component/ui/Btn";
 import AdminManager  from "./Adminmanager";
-
-const API_BASE = "/api";
+import { API_BASE, AUTH_URL } from "../lib/index";
+//const API_BASE = "/api";
 
 const fmt = {
   datetime: (d) => {
@@ -201,7 +201,7 @@ function ChangePasswordCard() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/admin/me/password`, {
+      const res = await fetch(`${AUTH_URL}/me/password`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${tok}` },
         body: JSON.stringify({ currentPassword: form.current, newPassword: form.next }),
@@ -271,7 +271,7 @@ export default function Settings() {
     if (!profile.name.trim()) { setProfMsg({ text: "Name cannot be empty", type: "error" }); return; }
     setProfLoading(true); setProfMsg(null);
     try {
-      const res = await fetch(`${API_BASE}/auth/admin/me`, {
+      const res = await fetch(`${AUTH_URL}/me`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ name: profile.name }),
