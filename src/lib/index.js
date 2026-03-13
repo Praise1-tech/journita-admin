@@ -64,9 +64,8 @@ export function useDebounce(value, delay = 300) {
 export const AUTH_KEY  = "journita_admin_token";
 export const ADMIN_KEY = "journita_admin_user";
 export const IS_DEV    = typeof window !== "undefined" && window.location.hostname === "localhost";
-export const API_BASE  = IS_DEV ? "/api/admin" : "https://api.journita.ai/api/admin";
-export const AUTH_URL  = IS_DEV ? "/api/auth/admin" : "https://api.journita.ai/api/auth/admin";
-
+export const API_BASE  = IS_DEV ? "http://localhost:5173/api/admin" : "https://api.journita.ai/api/admin";
+export const AUTH_URL  = IS_DEV ? "http://localhost:5173/api/auth/admin" : "https://api.journita.ai/api/auth/admin";
 export async function apiFetch(path, options = {}) {
   const token = localStorage.getItem(AUTH_KEY);
   const res = await fetch(`${API_BASE}${path}`, {
